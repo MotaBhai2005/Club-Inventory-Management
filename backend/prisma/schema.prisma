@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  permissions RolePermission[]
+  users       User[]
+}
+
+model RolePermission {
+  id       Int    @id @default(autoincrement())
+  roleId   Int
+  domain   String
+  action   String
+
+  role     Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, domain, action])
+}
+
+model User {
+  id                 Int      @id @default(autoincrement())
+  username           String   @unique
+  email              String   @unique
+  registrationNumber String?  @unique
+  passwordHash       String
+  role         String   @default("MEMBER") // ADMIN, INVENTORY_MANAGER, or MEMBER
+  
+  roleRef      Role?    @relation(fields: [role], references: [name])
+  lendings     Lending[]
+  auditLogs    AuditLog[]
+  requests     Request[]
+}
+
+model Item {
+  id       Int       @id @default(autoincrement())
+  name     String
+  cat      String
+  qty      Int       @default(1)
+  desc     String?
+  cond     String?   @default("Good")
+  
+  lendings Lending[]
+  history  History[]
+}
+
+model Lending {
+  id          Int      @id @default(autoincrement())
+  itemId      Int
+  userId      Int?
+  qty         Int      @default(1)
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED, RETURNED
+  club        String
+  theirMember String
+  ourMember   String
+  borrowerEmail String?
+  lentOn      String
+  duration    Int
+  notes       String?
+  alertSent   Boolean  @default(false)
+  
+  item        Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user        User?    @relation(fields: [userId], references: [id])
+}
+
+model History {
+  id          Int      @id @default(autoincrement())
+  itemId      Int
+  userId      Int?
+  qty         Int
+  club        String
+  theirMember String
+  ourMember   String
+  borrowerEmail String?
+  lentOn      String
+  returnedOn  String
+  duration    Int
+  
+  item        Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  action      String   
+  entity      String   
+  entityId    Int?     
+  userId      Int      
+  details     String?  
+  timestamp   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model BulkOrder {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  isProject   Boolean  @default(true) // Indicates if this bulk order is a "Project"
+  
+  // Project-specific fields
+  status      String?  @default("PLANNING")
+  startDate   String?
+  endDate     String?
+  imageUrl    String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items       BulkOrderItem[]
+}
+
+model BulkOrderItem {
+  id          Int       @id @default(autoincrement())
+  bulkOrderId Int
+  itemName    String
+  quantity    Int
+  notes       String?
+  
+  bulkOrder   BulkOrder @relation(fields: [bulkOrderId], references: [id], onDelete: Cascade)
+}
+
+model Request {
+  id               Int           @id @default(autoincrement())
+  userId           Int
+  title            String
+  type             String        // "COMPONENT", "BULK_ORDER", "PROJECT_IDEA"
+  status           String        @default("PENDING") // "PENDING", "APPROVED", "REJECTED", "COMPLETED"
+  priority         String        @default("MEDIUM")  // "LOW", "MEDIUM", "HIGH"
+  description      String?
+  deadline         String?
+  inspirationLinks String[]      // Array of URLs
+  adminNotes       String?       // Reason for rejection or general notes from manager
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  user             User          @relation(fields: [userId], references: [id])
+  items            RequestItem[]
+}
+
+model RequestItem {
+  id          Int      @id @default(autoincrement())
+  requestId   Int
+  itemName    String
+  quantity    Int
+  notes       String?
+
+  request     Request  @relation(fields: [requestId], references: [id], onDelete: Cascade)
+}

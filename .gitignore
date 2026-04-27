@@ -1,0 +1,14 @@
+node_modules
+node_modules/
+**/node_modules/
+.next/
+out/
+dist/
+*.log
+.env
+.env.*
+**/.env
+**/.env.*
+**/tsconfig.tsbuildinfo
+**/AGENTS.md
+**/CLAUDE.md
