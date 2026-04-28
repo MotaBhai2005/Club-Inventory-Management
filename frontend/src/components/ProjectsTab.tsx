@@ -101,7 +101,7 @@ export default function ProjectsTab() {
         {projects.filter(p => p.isProject).map((project) => (
           <div key={project.id} className="glass-panel overflow-hidden flex flex-col">
             {project.imageUrl ? (
-              <img src={`http://localhost:5000${project.imageUrl}`} alt={project.name} className="w-full h-48 object-cover" />
+              <img src={`${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\\/api$/, '')}${project.imageUrl}`} alt={project.name} className="w-full h-48 object-cover" />
             ) : (
               <div className="w-full h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
                 No Image Available
