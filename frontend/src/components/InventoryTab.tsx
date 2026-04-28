@@ -22,7 +22,7 @@ export default function InventoryTab({ items, onRefresh, isAdmin = true }: Inven
   const filteredItems = items.filter(i => 
     (filter === "All" || i.cat === filter) && 
     (i.name.toLowerCase().includes(search.toLowerCase()) || i.cat.toLowerCase().includes(search.toLowerCase()))
-  );
+  ).sort((a, b) => a.name.localeCompare(b.name));
 
   const handleDelete = async (id: number) => {
     if (confirm("Delete this item? This cannot be undone.")) {

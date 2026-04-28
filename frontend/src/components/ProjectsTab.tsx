@@ -101,7 +101,7 @@ export default function ProjectsTab() {
         {projects.filter(p => p.isProject).map((project) => (
           <div key={project.id} className="glass-panel overflow-hidden flex flex-col">
             {project.imageUrl ? (
-              <img src={`${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\\/api$/, '')}${project.imageUrl}`} alt={project.name} className="w-full h-48 object-cover" />
+              <img src={`${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '')}${project.imageUrl}`} alt={project.name} className="w-full h-48 object-cover" />
             ) : (
               <div className="w-full h-48 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
                 No Image Available
@@ -131,7 +131,7 @@ export default function ProjectsTab() {
               <div className="mt-auto border-t border-slate-200 dark:border-slate-700 pt-4">
                 <h4 className="font-medium text-sm mb-2 text-slate-700 dark:text-slate-200">Bulk Orders ({project.items?.length || 0})</h4>
                 <ul className="text-sm space-y-1 mb-4">
-                  {project.items?.map((item: any) => (
+                  {[...(project.items || [])].sort((a: any, b: any) => a.itemName.localeCompare(b.itemName)).map((item: any) => (
                     <li key={item.id} className="flex justify-between text-slate-500">
                       <span>{item.quantity}x {item.itemName}</span>
                     </li>
