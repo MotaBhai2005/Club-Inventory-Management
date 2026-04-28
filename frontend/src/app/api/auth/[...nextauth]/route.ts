@@ -35,8 +35,9 @@ const handler = NextAuth({
         }
 
         return '/?error=oauth_backend';
-      } catch {
-        return '/?error=oauth_unreachable';
+      } catch (error: any) {
+        console.error("SSO Catch Error:", error);
+        return `/?error=oauth_unreachable&msg=${encodeURIComponent(error?.message || 'unknown')}`;
       }
     },
     async jwt({ token, user, account }) {
@@ -71,8 +72,10 @@ const handler = NextAuth({
           } else {
             (token as any).oauthError = 'oauth_backend';
           }
-        } catch {
+        } catch (error: any) {
+          console.error("SSO JWT Catch Error:", error);
           (token as any).oauthError = 'oauth_unreachable';
+          (token as any).oauthErrorMsg = error?.message || 'unknown';
         }
       }
 
