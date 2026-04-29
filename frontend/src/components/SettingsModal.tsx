@@ -48,7 +48,7 @@ export default function SettingsModal({ isOpen, onClose, role }: SettingsModalPr
     tabs.push({ id: "system", label: "System Config", icon: Database });
   }
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
       
