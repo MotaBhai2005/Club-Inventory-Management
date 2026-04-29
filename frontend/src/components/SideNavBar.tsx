@@ -1,0 +1,123 @@
+"use client";
+import { Package, Users, History, UserCog, LogOut, PackageSearch, ClipboardList, Target } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
+
+interface SideNavBarProps {
+  activeTab: string;
+  setActiveTab: (tabId: string) => void;
+}
+
+export default function SideNavBar({ activeTab, setActiveTab }: SideNavBarProps) {
+  const router = useRouter();
+  const [role, setRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    setRole(localStorage.getItem("role"));
+  }, []);
+  
+  const tabs = [
+    { id: "inventory", label: "Inventory", icon: Package },
+    { id: "projects", label: "Projects", icon: PackageSearch },
+    { id: "requests", label: "Requests", icon: ClipboardList },
+  ];
+
+  if (role === "ADMIN" || role === "INVENTORY_MANAGER") {
+    tabs.push({ id: "lending", label: "Lending", icon: Users });
+    tabs.push({ id: "history", label: "History", icon: History });
+  }
+
+  if (role === "ADMIN") {
+    tabs.push({ id: "users", label: "Users", icon: UserCog });
+  }
+
+  const handleLogout = async () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    await signOut({ redirect: false });
+    router.push("/");
+  };
+
+  return (
+    <>
+      {/* Desktop Floating Dock */}
+      <aside className="hidden md:flex flex-col items-center fixed top-1/2 -translate-y-1/2 left-6 z-50 glass-panel py-6 px-3 rounded-[2rem] shadow-2xl shadow-brand-500/10 border border-white/20 dark:border-slate-700/50 gap-4">
+        {/* Logo / Brand Mark */}
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/30 mb-4 cursor-pointer" title="RoboFlow Dashboard">
+          <Target className="w-6 h-6 text-white" />
+        </div>
+
+        <div className="flex flex-col gap-3">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            
+            return (
+              <div key={tab.id} className="relative group">
+                <button
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 relative ${
+                    isActive 
+                      ? "bg-slate-900 dark:bg-slate-800 text-brand-400 shadow-lg shadow-black/20" 
+                      : "bg-white/50 dark:bg-slate-800/30 text-slate-500 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-700 hover:text-brand-500 hover:scale-110"
+                  }`}
+                >
+                  {/* Active Notch Indicator */}
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-brand-500 rounded-r-full" />
+                  )}
+                  <Icon className={`w-5 h-5 transition-transform duration-300 ${isActive ? "scale-110" : ""}`} />
+                </button>
+                
+                {/* Tooltip */}
+                <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg opacity-0 -translate-x-2 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap z-50 shadow-xl border border-white/10 dark:bg-slate-800">
+                  {tab.label}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Divider */}
+        <div className="w-8 h-px bg-slate-300/50 dark:bg-slate-600/50 my-2" />
+
+        {/* Sign Out Button */}
+        <div className="relative group">
+          <button
+            onClick={handleLogout}
+            className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 bg-red-50/50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 hover:scale-110"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
+          <div className="absolute left-full top-1/2 -translate-y-1/2 ml-4 px-3 py-1.5 bg-red-600 text-white text-xs font-semibold rounded-lg opacity-0 -translate-x-2 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap z-50 shadow-xl border border-red-500/50">
+            Sign Out
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Responsive Bottom Bar */}
+      <nav className="md:hidden fixed bottom-4 left-4 right-4 z-50 glass-panel p-2 rounded-2xl flex items-center justify-between shadow-2xl border border-white/20 dark:border-slate-700/50 overflow-x-auto gap-2">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+                isActive 
+                  ? "bg-slate-900 dark:bg-slate-800 text-brand-400 shadow-md" 
+                  : "text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-700/50"
+              }`}
+            >
+              <Icon className="w-4 h-4" />
+              {isActive && <span>{tab.label}</span>}
+            </button>
+          );
+        })}
+      </nav>
+    </>
+  );
+}

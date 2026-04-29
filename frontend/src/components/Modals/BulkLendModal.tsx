@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { X, Calendar, Search } from "lucide-react";
 import * as api from "@/services/api";
 import { Item } from "@/types";
@@ -77,7 +78,7 @@ export default function BulkLendModal({ onClose, onSave, items }: BulkLendModalP
 
   const totalBundleSize = Object.values(itemQtys).filter(q => q > 0).length;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-slate-900/40 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="glass-card w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
         <div className="px-6 py-4 border-b border-white/20 dark:border-slate-700/50 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
@@ -183,6 +184,7 @@ export default function BulkLendModal({ onClose, onSave, items }: BulkLendModalP
           <button onClick={handleSubmit} className="px-5 py-2 rounded-xl text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-white shadow-md shadow-brand-500/20 transition-all active:scale-[0.98]">Complete Checkout</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

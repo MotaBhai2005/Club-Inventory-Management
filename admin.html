@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RoboFlow | User Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Serif:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-card {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .mesh-gradient {
+            background-color: #020617;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(24, 95, 165, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(30, 41, 59, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(24, 95, 165, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(15, 23, 42, 0.5) 0px, transparent 50%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#1960a6",
+                      "secondary-fixed-dim": "#a5c8ff",
+                      "surface-tint": "#a4c9ff",
+                      "primary-container": "#185fa5",
+                      "tertiary-fixed-dim": "#ffb781",
+                      "on-primary-fixed": "#001c39",
+                      "outline-variant": "#424751",
+                      "status-admin-text": "#b91c1c",
+                      "on-background": "#e0e3e5",
+                      "surface-variant": "#323537",
+                      "primary-fixed-dim": "#a4c9ff",
+                      "surface-bright": "#363a3b",
+                      "error": "#ffb4ab",
+                      "brand-50": "#eff6ff",
+                      "on-secondary-container": "#8db7f6",
+                      "secondary-container": "#124780",
+                      "on-secondary": "#00315e",
+                      "on-primary": "#00315d",
+                      "surface-container-low": "#191c1e",
+                      "on-tertiary-fixed": "#2f1400",
+                      "surface-container-lowest": "#0b0f10",
+                      "background": "#101415",
+                      "on-surface": "#e0e3e5",
+                      "on-secondary-fixed-variant": "#124780",
+                      "on-error-container": "#ffdad6",
+                      "surface-container": "#1d2022",
+                      "on-secondary-fixed": "#001c3a",
+                      "brand-600": "#0C447C",
+                      "surface-container-highest": "#323537",
+                      "on-tertiary-container": "#ffceac",
+                      "brand-500": "#185FA5",
+                      "inverse-surface": "#e0e3e5",
+                      "status-manager-text": "#1d4ed8",
+                      "status-admin-bg": "#fef2f2",
+                      "brand-100": "#dbeafe",
+                      "on-primary-container": "#c1d9ff",
+                      "surface-dim": "#101415",
+                      "error-container": "#93000a",
+                      "on-primary-fixed-variant": "#004883",
+                      "tertiary-container": "#924b00",
+                      "on-tertiary-fixed-variant": "#703800",
+                      "bg-dark": "#020617",
+                      "brand-700": "#082f56",
+                      "outline": "#8c919c",
+                      "on-error": "#690005",
+                      "bg-light": "#f8fafc",
+                      "tertiary-fixed": "#ffdcc4",
+                      "surface": "#101415",
+                      "on-surface-variant": "#c2c6d2",
+                      "surface-container-high": "#272a2c",
+                      "secondary-fixed": "#d4e3ff",
+                      "tertiary": "#ffb781",
+                      "secondary": "#a5c8ff",
+                      "primary": "#a4c9ff",
+                      "artistic-black": "#0a0a0a",
+                      "status-manager-bg": "#eff6ff",
+                      "inverse-on-surface": "#2d3133",
+                      "primary-fixed": "#d4e3ff",
+                      "on-tertiary": "#4e2500"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "track-margin": "0.75rem",
+                      "grid-gutter": "1.25rem",
+                      "glass-padding": "1.5rem",
+                      "sidebar-width": "280px",
+                      "container-gap": "2rem"
+              },
+              "fontFamily": {
+                      "label-floating": ["Inter"],
+                      "display-serif": ["Noto Serif"],
+                      "table-header": ["Inter"],
+                      "body-main": ["Inter"],
+                      "headline-panel": ["Inter"]
+              },
+              "fontSize": {
+                      "label-floating": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "display-serif": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "table-header": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "body-main": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-panel": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="mesh-gradient min-h-screen text-on-surface font-body-main selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar Component -->
+<aside class="fixed left-0 h-full w-64 bg-slate-900/60 backdrop-blur-[20px] border-r border-white/10 rounded-r-lg shadow-2xl shadow-black/40 flex flex-col p-4 z-50 font-noto-serif antialiased">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-brand-500 flex items-center justify-center shadow-[0_0_15px_rgba(24,95,165,0.4)]">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+</div>
+<div>
+<h1 class="text-2xl font-bold text-blue-400 drop-shadow-[0_0_12px_rgba(24,95,165,0.6)]">RoboFlow</h1>
+<p class="text-[10px] text-slate-500 tracking-widest uppercase font-body-main">Precision Management</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Inventory -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-all hover:scale-[1.02] active:scale-95 duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-blue-400">inventory_2</span>
+<span class="font-body-main text-sm">Inventory</span>
+</a>
+<!-- Projects -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-all hover:scale-[1.02] active:scale-95 duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-blue-400">account_tree</span>
+<span class="font-body-main text-sm">Projects</span>
+</a>
+<!-- Requests -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-all hover:scale-[1.02] active:scale-95 duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-blue-400">hail</span>
+<span class="font-body-main text-sm">Requests</span>
+</a>
+<!-- Lending -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-all hover:scale-[1.02] active:scale-95 duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-blue-400">handshake</span>
+<span class="font-body-main text-sm">Lending</span>
+</a>
+<!-- History -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-100 hover:bg-white/5 transition-all hover:scale-[1.02] active:scale-95 duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-blue-400">history</span>
+<span class="font-body-main text-sm">History</span>
+</a>
+<!-- Users (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-500/10 text-blue-400 rounded-lg scale-105 transition-all shadow-[0_0_15px_rgba(59,130,246,0.2)]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-body-main text-sm font-semibold">Users</span>
+</a>
+</nav>
+<div class="pt-4 border-t border-white/5">
+<button class="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-lg transition-all hover:scale-[1.02] active:scale-95 duration-200 group">
+<span class="material-symbols-outlined group-hover:animate-pulse">logout</span>
+<span class="font-body-main text-sm font-medium">Sign Out</span>
+</button>
+</div>
+</aside>
+<!-- TopNavBar Component -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-slate-900/40 backdrop-blur-[20px] border-b border-white/10 flex items-center justify-between px-8 z-40 ml-64 shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-400 transition-colors">search</span>
+<input class="w-full bg-slate-800/50 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-blue-500/50 placeholder:text-slate-500 backdrop-blur-md" placeholder="Search users, roles, or IDs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="hover:bg-white/5 rounded-full p-2 transition-colors relative group">
+<span class="material-symbols-outlined text-slate-300">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full border-2 border-slate-900"></span>
+</button>
+<button class="hover:bg-white/5 rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined text-slate-300">settings</span>
+</button>
+<div class="h-8 w-px bg-white/10"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-xs font-semibold text-white">System Admin</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter">Inventory Node A1</p>
+</div>
+<img alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-blue-500/30 object-cover" data-alt="Close up portrait of a professional male system administrator in a dark tech environment with blue ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiii8D0A--58edePUuU-Kx12NpZKVnmd5lQ_wAePuEon1B4F30UORpbLeYtr-xWQ6jpEVaffnAMvWsm6e1Pc7YTEF1-Q6aQFrYvk9PVyEHWxFOs_uAG3wsuqQAMCxVF57RS2xL_ji7H02QTMkNMrGODijdqoPpan7AGzRUtzI7VgEOFw5-QN2aTYEMIjqFrjJzPn0VMgORyn_85nn1UciqYNkgeYMshyIlkJodzVTHGhI6KpoJXjogd5fLSAj79uBYXddhG78NPUU"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-64 pt-24 px-8 pb-12 min-h-screen">
+<div class="max-w-7xl mx-auto">
+<!-- Dashboard Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+<div>
+<h2 class="font-display-serif text-display-serif text-white mb-2">User Management</h2>
+<p class="font-body-main text-on-surface-variant max-w-lg">
+                        Manage administrators, inventory managers, and members. Oversee permissions across the RoboFlow neural architecture.
+                    </p>
+</div>
+<button class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-all transform hover:scale-105 active:scale-95 shadow-[0_8px_20px_rgba(24,95,165,0.3)]">
+<span class="material-symbols-outlined">person_add</span>
+<span class="font-semibold">Add User</span>
+</button>
+</div>
+<!-- Bento Grid Stats (Contextual Metadata) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<div class="glass-card p-6 rounded-2xl flex flex-col justify-between border-l-4 border-l-blue-500">
+<span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Unique Items</span>
+<div class="flex items-end justify-between mt-4">
+<span class="text-4xl font-display-serif text-white">1,284</span>
+<span class="text-blue-400 text-xs flex items-center bg-blue-400/10 px-2 py-1 rounded-full">+12% <span class="material-symbols-outlined text-[14px]">trending_up</span></span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-2xl flex flex-col justify-between border-l-4 border-l-red-500">
+<span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Total Units</span>
+<div class="flex items-end justify-between mt-4">
+<span class="text-4xl font-display-serif text-white">14</span>
+<span class="text-slate-500 text-[10px] uppercase font-bold">Active Lendings</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-2xl flex flex-col justify-between border-l-4 border-l-orange-400">
+<span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Access Requests</span>
+<div class="flex items-end justify-between mt-4">
+<span class="text-4xl font-display-serif text-white">42</span>
+<span class="text-orange-400 animate-pulse text-xs font-medium">Pending...</span>
+</div>
+</div>
+<div class="glass-card p-6 rounded-2xl flex flex-col justify-between border-l-4 border-l-slate-500">
+<span class="text-slate-500 text-xs font-bold uppercase tracking-widest">Overdue</span>
+<div class="flex items-end justify-between mt-4">
+<span class="text-4xl font-display-serif text-white">08</span>
+<span class="material-symbols-outlined text-slate-400">hub</span>
+</div>
+</div>
+</div>
+<!-- User Table Glass Card -->
+<div class="glass-card rounded-3xl overflow-hidden shadow-2xl border-white/5">
+<div class="px-8 py-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+<h3 class="font-headline-panel text-headline-panel text-white">Registry Database</h3>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-white/5 rounded-lg text-slate-400"><span class="material-symbols-outlined">filter_list</span></button>
+<button class="p-2 hover:bg-white/5 rounded-lg text-slate-400"><span class="material-symbols-outlined">download</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-white/[0.01]">
+<th class="px-8 py-5 font-table-header text-table-header text-slate-400 uppercase tracking-widest border-b border-white/5">Username</th>
+<th class="px-8 py-5 font-table-header text-table-header text-slate-400 uppercase tracking-widest border-b border-white/5">Email Address</th>
+<th class="px-8 py-5 font-table-header text-table-header text-slate-400 uppercase tracking-widest border-b border-white/5">Reg Number</th>
+<th class="px-8 py-5 font-table-header text-table-header text-slate-400 uppercase tracking-widest border-b border-white/5">Role</th>
+<th class="px-8 py-5 font-table-header text-table-header text-slate-400 uppercase tracking-widest border-b border-white/5 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<!-- Admin Row -->
+<tr class="hover:bg-white/[0.03] transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center text-red-400 font-bold">EX</div>
+<span class="text-sm font-semibold text-white">Elena Xavier</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-slate-400">e.xavier@roboflow.io</td>
+<td class="px-8 py-5 text-sm font-mono text-slate-500">#RF-9902-X</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-900/30 text-red-400 border border-red-500/20">
+                                        Admin
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-blue-500/10 hover:text-blue-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-2 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Manager Row -->
+<tr class="hover:bg-white/[0.03] transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold">MC</div>
+<span class="text-sm font-semibold text-white">Marcus Chen</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-slate-400">m.chen@roboflow.io</td>
+<td class="px-8 py-5 text-sm font-mono text-slate-500">#RF-4412-M</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-900/30 text-blue-400 border border-blue-500/20">
+                                        Inventory Manager
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-blue-500/10 hover:text-blue-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-2 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Member Row 1 -->
+<tr class="hover:bg-white/[0.03] transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-500/20 border border-slate-500/30 flex items-center justify-center text-slate-400 font-bold">SJ</div>
+<span class="text-sm font-semibold text-white">Sarah Jenkins</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-slate-400">s.jenkins@roboflow.io</td>
+<td class="px-8 py-5 text-sm font-mono text-slate-500">#RF-1022-S</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-white/5">
+                                        Member
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-blue-500/10 hover:text-blue-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-2 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Member Row 2 -->
+<tr class="hover:bg-white/[0.03] transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-500/20 border border-slate-500/30 flex items-center justify-center text-slate-400 font-bold">AK</div>
+<span class="text-sm font-semibold text-white">Arjun Kapoor</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-slate-400">a.kapoor@roboflow.io</td>
+<td class="px-8 py-5 text-sm font-mono text-slate-500">#RF-8831-A</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-white/5">
+                                        Member
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-blue-500/10 hover:text-blue-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-2 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</td>
+</tr>
+<!-- Member Row 3 -->
+<tr class="hover:bg-white/[0.03] transition-colors group border-b-0">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-500/20 border border-slate-500/30 flex items-center justify-center text-slate-400 font-bold">LW</div>
+<span class="text-sm font-semibold text-white">Lisa Wong</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm text-slate-400">l.wong@roboflow.io</td>
+<td class="px-8 py-5 text-sm font-mono text-slate-500">#RF-5567-L</td>
+<td class="px-8 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-white/5">
+                                        Member
+                                    </span>
+</td>
+<td class="px-8 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-blue-500/10 hover:text-blue-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-2 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-8 py-4 bg-white/[0.01] border-t border-white/5 flex items-center justify-between">
+<span class="text-xs text-slate-500 font-medium">Showing 5 of 1,284 users</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-slate-400 text-xs transition-colors">Previous</button>
+<button class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded text-xs font-bold border border-blue-500/30">1</button>
+<button class="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-slate-400 text-xs transition-colors">2</button>
+<button class="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-slate-400 text-xs transition-colors">3</button>
+<button class="px-3 py-1 bg-white/5 rounded hover:bg-white/10 text-slate-400 text-xs transition-colors">Next</button>
+</div>
+</div>
+</div>
+<!-- Contextual Action Card -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="text-xl font-bold text-white mb-2">Pending Access Requests</h4>
+<p class="text-sm text-slate-400 mb-6">Review new employee applications for system node access.</p>
+<button class="text-blue-400 font-bold text-sm flex items-center gap-2 hover:gap-4 transition-all">
+                            Open Queue <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<span class="material-symbols-outlined absolute -bottom-6 -right-6 text-9xl text-white/[0.03] rotate-12 group-hover:text-blue-500/10 transition-colors">hail</span>
+</div>
+<div class="glass-card p-8 rounded-3xl relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="text-xl font-bold text-white mb-2">Security Audit Logs</h4>
+<p class="text-sm text-slate-400 mb-6">Track admin actions and system permission changes in real-time.</p>
+<button class="text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg font-bold text-sm transition-all">
+                            View Reports
+                        </button>
+</div>
+<span class="material-symbols-outlined absolute -bottom-6 -right-6 text-9xl text-white/[0.03] -rotate-12 group-hover:text-red-500/10 transition-colors">policy</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Background Decorative Elements -->
+<div class="fixed top-[-10%] left-[-5%] w-[40%] h-[40%] bg-blue-600/10 blur-[150px] -z-10 pointer-events-none"></div>
+<div class="fixed bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-blue-900/10 blur-[150px] -z-10 pointer-events-none"></div>
+</body></html>

@@ -9,34 +9,38 @@ export default function MetricsComp({ metrics }: MetricsProps) {
   if (!metrics) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
       <MetricCard 
         label="Unique Items" 
         value={metrics.uniqueItems} 
         icon={Layers} 
-        colorClass="text-brand-500"
-        bgClass="bg-brand-50 dark:bg-brand-500/10"
+        valueColor="text-[#185FA5] dark:text-[#2589e6]"
+        iconBg="bg-[#185FA5]/10 dark:bg-[#185FA5]/20"
+        iconColor="text-[#185FA5] dark:text-[#2589e6]"
       />
       <MetricCard 
         label="Total Units" 
         value={metrics.totalUnits} 
         icon={Box} 
-        colorClass="text-slate-700 dark:text-slate-200"
-        bgClass="bg-slate-50 dark:bg-slate-800/50"
+        valueColor="text-slate-800 dark:text-slate-200"
+        iconBg="bg-slate-100 dark:bg-slate-800/80"
+        iconColor="text-slate-500 dark:text-slate-300"
       />
       <MetricCard 
         label="Active Lendings" 
         value={metrics.activeLendings} 
         icon={Activity} 
-        colorClass="text-amber-600 dark:text-amber-400"
-        bgClass="bg-amber-50 dark:bg-amber-400/10"
+        valueColor="text-amber-500"
+        iconBg="bg-amber-500/10 dark:bg-amber-500/10"
+        iconColor="text-amber-500"
       />
       <MetricCard 
         label="Overdue" 
         value={metrics.overdue} 
         icon={AlertCircle} 
-        colorClass="text-red-600 dark:text-red-400"
-        bgClass="bg-red-50 dark:bg-red-400/10"
+        valueColor="text-red-500 dark:text-red-400"
+        iconBg="bg-red-500/10 dark:bg-red-500/10"
+        iconColor="text-red-500 dark:text-red-400"
       />
     </div>
   );
@@ -46,25 +50,20 @@ interface MetricCardProps {
   label: string;
   value: number;
   icon: LucideIcon;
-  colorClass: string;
-  bgClass: string;
+  valueColor: string;
+  iconBg: string;
+  iconColor: string;
 }
 
-function MetricCard({ label, value, icon: Icon, colorClass, bgClass }: MetricCardProps) {
+function MetricCard({ label, value, icon: Icon, valueColor, iconBg, iconColor }: MetricCardProps) {
   return (
-    <div className={`glass-card p-5 flex items-center justify-between group transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl border border-white/40 dark:border-slate-700/50 relative overflow-hidden`}>
-      <div className={`absolute -right-6 -top-6 w-32 h-32 rounded-full blur-3xl opacity-10 transition-all duration-500 group-hover:opacity-30 group-hover:scale-110 ${bgClass}`} />
-      
-      <div className="relative z-10">
-        <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5">
-          {label}
-        </div>
-        <div className={`text-4xl font-black tracking-tighter ${colorClass}`}>
-          {value || 0}
-        </div>
+    <div className="bg-white dark:bg-[#0b1121] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-5 flex items-center justify-between transition-all duration-300 hover:shadow-lg dark:hover:border-slate-700">
+      <div className="flex flex-col gap-1.5">
+        <span className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest">{label}</span>
+        <span className={`text-4xl font-black tracking-tight ${valueColor}`}>{value || 0}</span>
       </div>
-      <div className={`relative z-10 p-4 rounded-2xl ${bgClass} transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3 shadow-sm border border-white/50 dark:border-slate-600/30`}>
-        <Icon className={`w-6 h-6 ${colorClass}`} />
+      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconBg}`}>
+        <Icon className={`w-5 h-5 ${iconColor}`} />
       </div>
     </div>
   );

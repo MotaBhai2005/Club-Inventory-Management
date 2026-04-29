@@ -126,7 +126,7 @@ export default function RequestModal({ isOpen, onClose, request, onRefresh, isAd
 
   const isReadOnly = !!request && !isAdmin;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
       <div className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-slate-200 dark:border-slate-800">
         
@@ -368,6 +368,7 @@ export default function RequestModal({ isOpen, onClose, request, onRefresh, isAd
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { X, Calendar } from "lucide-react";
 import * as api from "@/services/api";
 import { Item } from "@/types";
@@ -45,17 +46,17 @@ export default function LendItemModal({ onClose, onSave, items }: LendItemModalP
     return d.toLocaleDateString('en-IN', {day: '2-digit', month: 'short', year: 'numeric'});
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-slate-900/40 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="glass-card w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
-        <div className="px-6 py-4 border-b border-white/20 dark:border-slate-700/50 flex justify-between items-center">
+        <div className="px-6 py-4 border-b border-white/20 dark:border-slate-700/50 flex justify-between items-center shrink-0">
           <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">New Lending</h3>
           <button onClick={onClose} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-500">
             <X className="w-5 h-5" />
           </button>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1">
+        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1 min-h-0">
           <div className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Item to Lend *</label>
@@ -121,11 +122,12 @@ export default function LendItemModal({ onClose, onSave, items }: LendItemModalP
           </div>
         </form>
         
-        <div className="px-6 py-4 border-t border-white/20 dark:border-slate-700/50 flex justify-end gap-3 bg-slate-50/30 dark:bg-slate-800/30">
+        <div className="px-6 py-4 border-t border-white/20 dark:border-slate-700/50 flex justify-end gap-3 bg-slate-50/30 dark:bg-slate-800/30 shrink-0">
           <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Cancel</button>
           <button onClick={handleSubmit} className="px-4 py-2 rounded-lg text-sm font-medium bg-brand-500 hover:bg-brand-600 text-white shadow-sm transition-colors">Confirm Lending</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

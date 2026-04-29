@@ -8,6 +8,7 @@ import usersRoutes from './routes/users.routes';
 import systemRoutes from './routes/system.routes';
 import projectsRoutes from './routes/projects.routes';
 import requestsRoutes from './routes/requests.routes';
+import notificationsRoutes from './routes/notifications.routes';
 import path from 'path';
 
 const app = express();
@@ -31,6 +32,7 @@ app.use('/api/metrics', metricsRoutes);
 app.use('/api/system', systemRoutes);
 app.use('/api/projects', projectsRoutes);
 app.use('/api/requests', requestsRoutes);
+app.use('/api/notifications', notificationsRoutes);
 
 // Global Error Handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

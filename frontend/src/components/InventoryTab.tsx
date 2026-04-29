@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Search, Plus, Edit2, Trash2 } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, Download } from "lucide-react";
+import * as XLSX from "xlsx";
 import AddItemModal from "./Modals/AddItemModal";
 import * as api from "@/services/api";
 import { Item } from "@/types";
@@ -35,17 +36,57 @@ export default function InventoryTab({ items, onRefresh, isAdmin = true }: Inven
     }
   };
 
+  const handleDownloadExcel = () => {
+    const data = filteredItems.map(item => ({
+      "ID": item.id,
+      "Item Name": item.name,
+      "Category": item.cat,
+      "Total Quantity": item.qty,
+      "Available Quantity": item.availQty,
+      "Lent Quantity": item.lentQty || 0,
+      "Condition": item.cond || "Good",
+      "Description": item.desc || ""
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    
+    // Auto-size columns for better organization
+    worksheet["!cols"] = [
+      { wch: 6 },  // ID
+      { wch: 35 }, // Item Name
+      { wch: 18 }, // Category
+      { wch: 15 }, // Total Qty
+      { wch: 18 }, // Avail Qty
+      { wch: 15 }, // Lent Qty
+      { wch: 15 }, // Condition
+      { wch: 50 }, // Description
+    ];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Inventory");
+
+    XLSX.writeFile(workbook, `Inventory_Report_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100">{isAdmin ? "All Items" : "Available Items"}</h2>
         {isAdmin && (
-          <button 
-            onClick={() => { setEditItem(null); setModalOpen(true); }}
-            className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
-          >
-            <Plus className="w-4 h-4" /> Add Item
-          </button>
+          <div className="flex gap-3">
+            <button 
+              onClick={handleDownloadExcel}
+              className="flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            >
+              <Download className="w-4 h-4" /> Export Excel
+            </button>
+            <button 
+              onClick={() => { setEditItem(null); setModalOpen(true); }}
+              className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            >
+              <Plus className="w-4 h-4" /> Add Item
+            </button>
+          </div>
         )}
       </div>
 

@@ -38,6 +38,7 @@ model User {
   lendings     Lending[]
   auditLogs    AuditLog[]
   requests     Request[]
+  notifications Notification[]
 }
 
 model Item {
@@ -153,4 +154,16 @@ model RequestItem {
   notes       String?
 
   request     Request  @relation(fields: [requestId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  type      String   // "INFO", "WARNING", "SUCCESS", "ERROR"
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

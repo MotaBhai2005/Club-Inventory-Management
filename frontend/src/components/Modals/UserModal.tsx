@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import * as api from "@/services/api";
 import { User } from "@/types";
@@ -61,7 +62,7 @@ export default function UserModal({ user, onClose, onSuccess, currentUserId }: U
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-slate-900/40 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="glass-card w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 shadow-2xl">
         <div className="px-6 py-4 border-b border-white/20 dark:border-slate-700/50 flex justify-between items-center bg-white/50 dark:bg-slate-800/50">
@@ -183,6 +184,7 @@ export default function UserModal({ user, onClose, onSuccess, currentUserId }: U
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { jwtDecode } from "jwt-decode";
-import TopBar from "@/components/TopBar";
+import SideNavBar from "@/components/SideNavBar";
+import TopNavBar from "@/components/TopNavBar";
+import DataBackground from "@/components/DataBackground";
 import Metrics from "@/components/Metrics";
 import InventoryTab from "@/components/InventoryTab";
 import LendingTab from "@/components/LendingTab";
@@ -68,10 +70,18 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <TopBar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="min-h-screen relative overflow-x-hidden">
+      <DataBackground />
+      <SideNavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <TopNavBar />
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
+      <main className="md:ml-24 pt-28 px-6 md:px-8 pb-12 w-full max-w-7xl mx-auto min-h-screen relative z-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          <div>
+            <h2 className="font-serif text-3xl font-semibold text-slate-800 dark:text-white mb-2">Admin Dashboard</h2>
+          </div>
+        </div>
+
         <Metrics metrics={metrics} />
 
         <div className="mt-8">
