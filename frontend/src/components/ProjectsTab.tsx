@@ -58,6 +58,7 @@ export default function ProjectsTab() {
   };
 
   const canEdit = role === "ADMIN" || role === "INVENTORY_MANAGER";
+  const visibleProjects = projects.filter(p => p.isProject);
 
   return (
     <div className="space-y-6">
@@ -97,8 +98,22 @@ export default function ProjectsTab() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.filter(p => p.isProject).map((project) => (
+      {visibleProjects.length === 0 && !isCreating ? (
+        <div className="glass-panel p-8 text-center">
+          <div className="mx-auto max-w-md">
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">No projects yet</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Create a project to track bulk orders and timelines.</p>
+            <button
+              onClick={canEdit ? () => setIsCreating(true) : loadProjects}
+              className="mt-5 inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-brand-500 hover:bg-brand-600 text-white shadow-sm transition-colors"
+            >
+              {canEdit ? "Create Project" : "Refresh Projects"}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {visibleProjects.map((project) => (
           <div key={project.id} className="glass-panel overflow-hidden flex flex-col">
             {project.imageUrl ? (
               <img src={`${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '')}${project.imageUrl}`} alt={project.name} className="w-full h-48 object-cover" />
@@ -163,8 +178,9 @@ export default function ProjectsTab() {
               </div>
             </div>
           </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

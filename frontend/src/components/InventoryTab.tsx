@@ -25,6 +25,22 @@ export default function InventoryTab({ items, onRefresh, isAdmin = true }: Inven
     (i.name.toLowerCase().includes(search.toLowerCase()) || i.cat.toLowerCase().includes(search.toLowerCase()))
   ).sort((a, b) => a.name.localeCompare(b.name));
 
+  const hasItems = filteredItems.length > 0;
+  const emptyTitle = items.length === 0 ? "No inventory yet" : "No matches found";
+  const emptyDescription = items.length === 0
+    ? "Start by adding your first component to the inventory."
+    : "Try clearing filters or adjusting your search terms.";
+  const handleEmptyAction = () => {
+    if (isAdmin) {
+      setEditItem(null);
+      setModalOpen(true);
+      return;
+    }
+    setSearch("");
+    setFilter("All");
+    onRefresh();
+  };
+
   const handleDelete = async (id: number) => {
     if (confirm("Delete this item? This cannot be undone.")) {
       try {
@@ -119,22 +135,21 @@ export default function InventoryTab({ items, onRefresh, isAdmin = true }: Inven
       </div>
 
       <div className="glass-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-white/20 dark:border-slate-700/50">
-              <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Item</th>
-              <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Category</th>
-              <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Qty</th>
-              <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Available</th>
-              <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
-              {isAdmin && <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Actions</th>}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/20 dark:divide-slate-700/50">
-            {filteredItems.length === 0 ? (
-              <tr><td colSpan={isAdmin ? 6 : 5} className="p-8 text-center text-sm text-slate-500 font-medium">No items found</td></tr>
-            ) : filteredItems.map(item => (
+        {hasItems ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-white/20 dark:border-slate-700/50">
+                <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Item</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Category</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Qty</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Available</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+                {isAdmin && <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Actions</th>}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/20 dark:divide-slate-700/50">
+              {filteredItems.map(item => (
               <tr key={item.id} className="hover:bg-white/60 dark:hover:bg-slate-700/40 transition-all duration-300 group">
                 <td className="p-4">
                   <div className="font-bold text-slate-800 dark:text-slate-100 text-sm group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">{item.name}</div>
@@ -165,10 +180,24 @@ export default function InventoryTab({ items, onRefresh, isAdmin = true }: Inven
                   </td>
                 )}
               </tr>
-            ))}
-          </tbody>
-          </table>
-        </div>
+              ))}
+            </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="p-8 text-center">
+            <div className="mx-auto max-w-md">
+              <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{emptyTitle}</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">{emptyDescription}</p>
+              <button
+                onClick={handleEmptyAction}
+                className="mt-5 inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-brand-500 hover:bg-brand-600 text-white shadow-sm transition-colors"
+              >
+                {isAdmin ? "Add Item" : "Clear Filters"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {isModalOpen && (

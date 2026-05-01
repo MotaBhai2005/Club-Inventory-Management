@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, Calendar } from "lucide-react";
 import * as api from "@/services/api";
@@ -24,6 +24,17 @@ export default function LendItemModal({ onClose, onSave, items }: LendItemModalP
   });
 
   const selectedItem = items.find(i => i.id === parseInt(formData.itemId));
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   const handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();

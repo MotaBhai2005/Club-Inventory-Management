@@ -12,10 +12,24 @@ interface SideNavBarProps {
 export default function SideNavBar({ activeTab, setActiveTab }: SideNavBarProps) {
   const router = useRouter();
   const [role, setRole] = useState<string | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   useEffect(() => {
     setRole(localStorage.getItem("role"));
   }, []);
+
+  useEffect(() => {
+    if (!isConfirmOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsConfirmOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isConfirmOpen]);
   
   const tabs = [
     { id: "inventory", label: "Inventory", icon: Package },
@@ -37,6 +51,10 @@ export default function SideNavBar({ activeTab, setActiveTab }: SideNavBarProps)
     localStorage.removeItem("role");
     await signOut({ redirect: false });
     router.push("/");
+  };
+
+  const handleLogoutClick = () => {
+    setIsConfirmOpen(true);
   };
 
   return (
@@ -88,7 +106,7 @@ export default function SideNavBar({ activeTab, setActiveTab }: SideNavBarProps)
           {/* Sign Out Button */}
           <div className="relative group">
             <button
-              onClick={handleLogout}
+              onClick={handleLogoutClick}
               className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 bg-red-50/50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 hover:scale-110"
             >
               <LogOut className="w-5 h-5" />
@@ -121,7 +139,45 @@ export default function SideNavBar({ activeTab, setActiveTab }: SideNavBarProps)
             </button>
           );
         })}
+        <button
+          onClick={handleLogoutClick}
+          className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-300 bg-red-50/70 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20"
+          aria-label="Sign Out"
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="hidden sm:inline">Sign Out</span>
+        </button>
       </nav>
+
+      {isConfirmOpen && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+          <button
+            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            onClick={() => setIsConfirmOpen(false)}
+            aria-label="Close sign out confirmation"
+          />
+          <div className="relative w-full max-w-sm rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-6">
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">Sign out?</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">You will need to sign in again to access the dashboard.</p>
+            <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setIsConfirmOpen(false)}
+                className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors w-full sm:w-auto"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-lg text-sm font-medium bg-red-500 hover:bg-red-600 text-white transition-colors w-full sm:w-auto"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -25,6 +25,17 @@ export default function AddItemModal({ onClose, onSave, item }: AddItemModalProp
     });
   }, [item]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   const handleSubmit = async (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
     try {

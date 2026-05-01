@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, Calendar, Search } from "lucide-react";
 import * as api from "@/services/api";
@@ -77,6 +77,17 @@ export default function BulkLendModal({ onClose, onSave, items }: BulkLendModalP
   };
 
   const totalBundleSize = Object.values(itemQtys).filter(q => q > 0).length;
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   return createPortal(
     <div className="fixed inset-0 bg-slate-900/40 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">

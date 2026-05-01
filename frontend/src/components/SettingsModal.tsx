@@ -26,7 +26,20 @@ export default function SettingsModal({ isOpen, onClose, role }: SettingsModalPr
   // States for System
   const [maxCheckoutDuration, setMaxCheckoutDuration] = useState("14");
   const { theme, setTheme } = useTheme();
-  
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleSave = () => {
