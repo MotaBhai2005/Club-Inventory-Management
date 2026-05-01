@@ -79,7 +79,7 @@ export default function LendItemModal({ onClose, onSave, items }: LendItemModalP
               <input required type="number" min="1" max={selectedItem?.availQty || 1} value={formData.qty || ''} onChange={e => setFormData({...formData, qty: parseInt(e.target.value) || 0})} className="w-full px-3 py-2 rounded-lg glass-input bg-white/50 dark:bg-slate-800/50 text-sm focus:ring-2 focus:ring-brand-500/50 outline-none" />
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Lending Club / Organization *</label>
                 <input required type="text" value={formData.club} onChange={e => setFormData({...formData, club: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-input bg-white/50 dark:bg-slate-800/50 text-sm focus:ring-2 focus:ring-brand-500/50 outline-none" placeholder="e.g. IEEE Branch" />
@@ -95,7 +95,7 @@ export default function LendItemModal({ onClose, onSave, items }: LendItemModalP
               <input type="email" value={formData.borrowerEmail} onChange={e => setFormData({...formData, borrowerEmail: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-input bg-white/50 dark:bg-slate-800/50 text-sm focus:ring-2 focus:ring-brand-500/50 outline-none" placeholder="For automated overdue alerts" />
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Our Member *</label>
                 <input required type="text" value={formData.ourMember} onChange={e => setFormData({...formData, ourMember: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-input bg-white/50 dark:bg-slate-800/50 text-sm focus:ring-2 focus:ring-brand-500/50 outline-none" placeholder="Handler name" />
@@ -122,9 +122,9 @@ export default function LendItemModal({ onClose, onSave, items }: LendItemModalP
           </div>
         </form>
         
-        <div className="px-6 py-4 border-t border-white/20 dark:border-slate-700/50 flex justify-end gap-3 bg-slate-50/30 dark:bg-slate-800/30 shrink-0">
-          <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Cancel</button>
-          <button onClick={handleSubmit} className="px-4 py-2 rounded-lg text-sm font-medium bg-brand-500 hover:bg-brand-600 text-white shadow-sm transition-colors">Confirm Lending</button>
+        <div className="px-6 py-4 border-t border-white/20 dark:border-slate-700/50 flex flex-col sm:flex-row justify-end gap-3 bg-slate-50/30 dark:bg-slate-800/30 shrink-0">
+          <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors w-full sm:w-auto">Cancel</button>
+          <button onClick={handleSubmit} className="px-4 py-2 rounded-lg text-sm font-medium bg-brand-500 hover:bg-brand-600 text-white shadow-sm transition-colors w-full sm:w-auto">Confirm Lending</button>
         </div>
       </div>
     </div>,

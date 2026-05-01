@@ -79,7 +79,7 @@ export default function ProjectsTab() {
       {isCreating && canEdit && (
         <div className="glass-panel p-6">
           <h3 className="text-lg font-semibold mb-4">Create New Project</h3>
-          <form onSubmit={handleCreateProject} className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleCreateProject} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input type="text" placeholder="Project Name" className="glass-input" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
             <select className="glass-input" value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })}>
               <option value="PLANNING">Planning</option>
@@ -88,8 +88,8 @@ export default function ProjectsTab() {
             </select>
             <input type="date" className="glass-input" value={formData.startDate} onChange={e => setFormData({ ...formData, startDate: e.target.value })} />
             <input type="date" className="glass-input" value={formData.endDate} onChange={e => setFormData({ ...formData, endDate: e.target.value })} />
-            <textarea placeholder="Description" className="glass-input col-span-2" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
-            <div className="col-span-2 flex justify-end gap-2">
+            <textarea placeholder="Description" className="glass-input col-span-1 sm:col-span-2" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
+            <div className="col-span-1 sm:col-span-2 flex flex-col sm:flex-row justify-end gap-2">
               <button type="button" onClick={() => setIsCreating(false)} className="btn-secondary">Cancel</button>
               <button type="submit" className="btn-primary">Create</button>
             </div>

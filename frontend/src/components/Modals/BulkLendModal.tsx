@@ -94,7 +94,7 @@ export default function BulkLendModal({ onClose, onSave, items }: BulkLendModalP
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1 flex flex-col lg:flex-row gap-8">
           {/* Left Column: Organization & Timing Details */}
           <div className="flex-1 space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="col-span-2">
                 <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Organization / Club *</label>
                 <input required type="text" value={formData.club} onChange={e => setFormData({...formData, club: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-input bg-white/50 dark:bg-slate-800/50 text-sm focus:ring-2 focus:ring-brand-500/50 outline-none" placeholder="e.g. IEEE Branch" />
@@ -132,7 +132,7 @@ export default function BulkLendModal({ onClose, onSave, items }: BulkLendModalP
           </div>
 
           {/* Right Column: Dynamic Item Selector */}
-          <div className="flex-1 border-l border-white/20 dark:border-slate-700/50 pl-0 lg:pl-8 mt-6 lg:mt-0 flex flex-col h-[400px]">
+          <div className="flex-1 border-t lg:border-t-0 lg:border-l border-white/20 dark:border-slate-700/50 pl-0 lg:pl-8 pt-6 lg:pt-0 mt-6 lg:mt-0 flex flex-col h-[400px]">
             <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-3">Add Hardware to Cart</h4>
             
             <div className="relative mb-4">
@@ -179,9 +179,9 @@ export default function BulkLendModal({ onClose, onSave, items }: BulkLendModalP
           </div>
         </form>
         
-        <div className="px-6 py-4 border-t border-white/20 dark:border-slate-700/50 flex justify-end gap-3 bg-slate-50/50 dark:bg-slate-800/50 mt-auto">
-          <button type="button" onClick={onClose} className="px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition-colors shadow-sm bg-slate-100 dark:bg-slate-800">Cancel</button>
-          <button onClick={handleSubmit} className="px-5 py-2 rounded-xl text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-white shadow-md shadow-brand-500/20 transition-all active:scale-[0.98]">Complete Checkout</button>
+        <div className="px-6 py-4 border-t border-white/20 dark:border-slate-700/50 flex flex-col sm:flex-row justify-end gap-3 bg-slate-50/50 dark:bg-slate-800/50 mt-auto">
+          <button type="button" onClick={onClose} className="px-5 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition-colors shadow-sm bg-slate-100 dark:bg-slate-800 w-full sm:w-auto">Cancel</button>
+          <button onClick={handleSubmit} className="px-5 py-2 rounded-xl text-sm font-semibold bg-brand-500 hover:bg-brand-600 text-white shadow-md shadow-brand-500/20 transition-all active:scale-[0.98] w-full sm:w-auto">Complete Checkout</button>
         </div>
       </div>
     </div>,

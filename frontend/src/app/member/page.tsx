@@ -54,8 +54,9 @@ export default function MemberDashboard() {
       <main className="md:ml-24 pt-28 px-6 md:px-8 pb-12 w-full max-w-7xl mx-auto min-h-screen relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div>
-            <h1 className="font-serif text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">Live Component Availability</h1>
-            <p className="text-sm text-slate-500 max-w-lg">Check to see what hardware is currently sitting in the lab, or view ongoing projects.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Welcome, Member</p>
+            <h1 className="font-serif text-3xl font-bold text-slate-800 dark:text-slate-100 mt-2 mb-2">Live Component Availability</h1>
+            <p className="text-sm text-slate-500 max-w-lg">Explore what is in the lab, track active projects, and make requests in a few taps.</p>
           </div>
         </div>
         

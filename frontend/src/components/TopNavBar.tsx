@@ -1,9 +1,10 @@
 "use client";
-import { Search, Bell, Settings, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Search, Bell, Settings, User, Moon, Sun } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import SettingsModal from "./SettingsModal";
 import * as api from "@/services/api";
+import { useTheme } from "@/components/ThemeProvider";
 
 interface Notification {
   id: number;
@@ -18,9 +19,11 @@ export default function TopNavBar() {
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string>("");
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const notificationsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -41,6 +44,20 @@ export default function TopNavBar() {
     ]);
   }, []);
 
+  useEffect(() => {
+    if (!showNotifications) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (notificationsRef.current && !notificationsRef.current.contains(target)) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showNotifications]);
+
   const getRoleDisplay = () => {
     if (role === "ADMIN") return "System Admin";
     if (role === "INVENTORY_MANAGER") return "Inventory Manager";
@@ -51,7 +68,7 @@ export default function TopNavBar() {
 
   return (
     <>
-      <header className="fixed top-0 right-0 w-full md:w-[calc(100%-6rem)] h-20 bg-slate-900/40 dark:bg-slate-900/60 backdrop-blur-[20px] border-b border-white/10 dark:border-slate-700/50 flex items-center justify-between px-8 z-40 md:ml-24 shadow-sm transition-all">
+      <header className="fixed top-0 left-0 right-0 w-full h-16 sm:h-20 bg-slate-900/40 dark:bg-slate-900/60 backdrop-blur-[20px] border-b border-white/10 dark:border-slate-700/50 flex items-center justify-between px-4 sm:px-8 md:pl-28 z-40 shadow-sm transition-all">
         <div className="flex items-center gap-4 flex-1">
           <div className="relative w-full max-w-md group hidden md:block">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-brand-500 transition-colors" />
@@ -63,12 +80,12 @@ export default function TopNavBar() {
           </div>
         </div>
         
-        <div className="flex items-center gap-4 sm:gap-6 ml-auto">
+        <div className="flex items-center gap-2 sm:gap-6 ml-auto">
           
-          <div className="relative">
+          <div className="relative" ref={notificationsRef}>
             <button 
               onClick={() => setShowNotifications(!showNotifications)}
-              className="hover:bg-white/10 dark:hover:bg-slate-800 rounded-full p-2.5 transition-colors relative group"
+              className="hover:bg-white/10 dark:hover:bg-slate-800 rounded-full p-2 sm:p-2.5 transition-colors relative group"
             >
               <Bell className="w-5 h-5 text-slate-300 dark:text-slate-400 group-hover:text-white" />
               {unreadCount > 0 && (
@@ -77,7 +94,7 @@ export default function TopNavBar() {
             </button>
             
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden z-50">
+              <div className="absolute right-0 mt-2 w-[calc(100vw-2rem)] max-w-80 sm:w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden z-50">
                 <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-950">
                   <h4 className="font-bold text-slate-800 dark:text-white text-sm">Notifications</h4>
                   <button className="text-[10px] text-brand-500 font-semibold hover:underline">Mark all as read</button>
@@ -103,16 +120,28 @@ export default function TopNavBar() {
             )}
           </div>
 
+          <button
+            onClick={toggleTheme}
+            className="hover:bg-white/10 dark:hover:bg-slate-800 rounded-full p-2 sm:p-2.5 transition-colors group"
+            title="Toggle Theme"
+          >
+            {theme === "dark" ? (
+              <Sun className="w-5 h-5 text-slate-300 dark:text-slate-400 group-hover:text-white" />
+            ) : (
+              <Moon className="w-5 h-5 text-slate-300 dark:text-slate-400 group-hover:text-white" />
+            )}
+          </button>
+
           <button 
             onClick={() => setIsSettingsOpen(true)}
-            className="hover:bg-white/10 dark:hover:bg-slate-800 rounded-full p-2.5 transition-colors group"
+            className="hover:bg-white/10 dark:hover:bg-slate-800 rounded-full p-2 sm:p-2.5 transition-colors group"
           >
             <Settings className="w-5 h-5 text-slate-300 dark:text-slate-400 group-hover:text-white" />
           </button>
           
           <div className="h-8 w-px bg-white/10 dark:bg-slate-700 mx-1 hidden sm:block"></div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="text-right hidden sm:block">
               <p className="text-xs font-semibold text-slate-800 dark:text-white">{getRoleDisplay()}</p>
               <p className="text-[10px] text-brand-600 dark:text-brand-400 uppercase tracking-tighter font-medium">{username}</p>

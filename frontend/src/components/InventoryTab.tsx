@@ -119,7 +119,8 @@ export default function InventoryTab({ items, onRefresh, isAdmin = true }: Inven
       </div>
 
       <div className="glass-card overflow-hidden">
-        <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-white/20 dark:border-slate-700/50">
               <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Item</th>
@@ -166,7 +167,8 @@ export default function InventoryTab({ items, onRefresh, isAdmin = true }: Inven
               </tr>
             ))}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
 
       {isModalOpen && (

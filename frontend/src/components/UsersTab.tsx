@@ -37,14 +37,14 @@ export default function UsersTab({ users, onRefresh, currentUserId }: UsersTabPr
 
   return (
     <div className="glass-card overflow-hidden">
-      <div className="glass-panel px-6 py-4 flex justify-between items-center bg-white/50 dark:bg-slate-800/50">
-        <div>
+      <div className="glass-panel px-6 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-white/50 dark:bg-slate-800/50">
+        <div className="text-center sm:text-left">
           <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">User Management</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">Manage administrators, inventory managers, and members</p>
         </div>
         <button
           onClick={handleCreate}
-          className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-sm hover:shadow-md active:scale-95"
+          className="flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-sm hover:shadow-md active:scale-95 w-full sm:w-auto"
         >
           <Plus className="w-4 h-4" /> Add User
         </button>

@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { Boxes, Eye, EyeOff, Moon, Sun, AlertCircle, X } from "lucide-react";
 import * as api from "@/services/api";
+import { useTheme } from "@/components/ThemeProvider";
 
 function getOAuthErrorMessage(errorCode: string | null) {
   switch (errorCode) {
@@ -30,8 +31,9 @@ function LoginContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isToastExiting, setIsToastExiting] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeModal, setActiveModal] = useState<'privacy' | 'terms' | null>(null);
+  const { theme, toggleTheme } = useTheme();
+  const isDarkMode = theme === "dark";
 
   // Auto-dismiss toast after 5s
   useEffect(() => {
@@ -149,10 +151,10 @@ function LoginContent() {
         
         {/* Theme Toggle Placeholder */}
         <button 
-          onClick={() => setIsDarkMode(!isDarkMode)}
+          onClick={toggleTheme}
           style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'transparent', border: 'none', cursor: 'pointer', color: 'color-mix(in srgb, var(--foreground) 50%, transparent)' }}
           className="hover:scale-[1.05] transition-all"
-          title="Toggle Theme (Placeholder)"
+          title="Toggle Theme"
         >
           {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>

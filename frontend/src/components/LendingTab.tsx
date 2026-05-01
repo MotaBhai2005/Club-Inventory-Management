@@ -47,18 +47,18 @@ export default function LendingTab({ lendings, items, onRefresh }: LendingTabPro
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100">Active Lendings</h2>
-        <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+        <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100 text-center sm:text-left">Active Lendings</h2>
+        <div className="flex flex-col sm:flex-row gap-3">
           <button 
             onClick={() => setBulkOpen(true)}
-            className="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            className="flex items-center justify-center gap-2 bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm w-full sm:w-auto"
           >
             <PackagePlus className="w-4 h-4" /> Bulk Checkout
           </button>
           <button 
             onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm"
+            className="flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" /> New Lending
           </button>
@@ -66,7 +66,8 @@ export default function LendingTab({ lendings, items, onRefresh }: LendingTabPro
       </div>
 
       <div className="glass-card overflow-hidden">
-        <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-white/20 dark:border-slate-700/50">
               <th className="p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Item</th>
@@ -115,7 +116,8 @@ export default function LendingTab({ lendings, items, onRefresh }: LendingTabPro
               )
             })}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
 
       {isModalOpen && (

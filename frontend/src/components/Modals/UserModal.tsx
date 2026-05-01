@@ -161,19 +161,19 @@ export default function UserModal({ user, onClose, onSuccess, currentUserId }: U
             </div>
           </div>
 
-          <div className="pt-6 border-t border-white/20 dark:border-slate-700/50 flex justify-end gap-3 rounded-b-xl">
+          <div className="pt-6 border-t border-white/20 dark:border-slate-700/50 flex flex-col sm:flex-row justify-end gap-3 rounded-b-xl">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 w-full sm:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 rounded-lg text-sm font-medium bg-brand-500 hover:bg-brand-600 text-white shadow-sm transition-colors flex items-center justify-center min-w-[100px] disabled:opacity-50"
+              className="px-4 py-2 rounded-lg text-sm font-medium bg-brand-500 hover:bg-brand-600 text-white shadow-sm transition-colors flex items-center justify-center min-w-[100px] disabled:opacity-50 w-full sm:w-auto"
             >
               {loading ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin flex-shrink-0" />

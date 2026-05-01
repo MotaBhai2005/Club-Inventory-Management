@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { X, User, Settings, ShieldAlert, Monitor, BellRing, Database } from "lucide-react";
+import { X, User, Settings, ShieldAlert, Monitor, BellRing, Database, Moon, Sun } from "lucide-react";
 import * as api from "@/services/api";
+import { useTheme } from "@/components/ThemeProvider";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export default function SettingsModal({ isOpen, onClose, role }: SettingsModalPr
 
   // States for System
   const [maxCheckoutDuration, setMaxCheckoutDuration] = useState("14");
+  const { theme, setTheme } = useTheme();
   
   if (!isOpen) return null;
 
@@ -52,10 +54,10 @@ export default function SettingsModal({ isOpen, onClose, role }: SettingsModalPr
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
       
-      <div className="relative w-full max-w-4xl max-h-[85vh] bg-slate-50 dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-4xl max-h-[85vh] bg-slate-50 dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
         {/* Sidebar */}
-        <div className="w-64 bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 p-6 flex flex-col gap-2">
+        <div className="w-full md:w-64 bg-white dark:bg-slate-950 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 p-4 sm:p-6 flex flex-col gap-2">
           <div className="flex items-center gap-2 mb-6">
             <Settings className="w-5 h-5 text-brand-500" />
             <h2 className="text-lg font-bold text-slate-800 dark:text-white">Settings</h2>
@@ -83,7 +85,7 @@ export default function SettingsModal({ isOpen, onClose, role }: SettingsModalPr
 
         {/* Content Area */}
         <div className="flex-1 flex flex-col h-full">
-          <div className="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex justify-between items-center p-4 sm:p-6 border-b border-slate-200 dark:border-slate-800">
             <h3 className="text-xl font-bold text-slate-800 dark:text-white capitalize">
               {activeTab} Settings
             </h3>
@@ -92,7 +94,7 @@ export default function SettingsModal({ isOpen, onClose, role }: SettingsModalPr
             </button>
           </div>
 
-          <div className="p-8 overflow-y-auto flex-1 min-h-0">
+          <div className="p-4 sm:p-8 overflow-y-auto flex-1 min-h-0">
             {activeTab === "personal" && (
               <div className="space-y-8 max-w-lg">
                 <div>
@@ -110,6 +112,22 @@ export default function SettingsModal({ isOpen, onClose, role }: SettingsModalPr
                         <option value="comfortable">Comfortable</option>
                         <option value="compact">Compact</option>
                       </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">Theme</label>
+                      <div className="flex items-center gap-2">
+                        <select
+                          value={theme}
+                          onChange={(e) => setTheme(e.target.value as "light" | "dark")}
+                          className="flex-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none"
+                        >
+                          <option value="light">Light</option>
+                          <option value="dark">Dark</option>
+                        </select>
+                        <div className="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 bg-white dark:bg-slate-800">
+                          {theme === "dark" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
