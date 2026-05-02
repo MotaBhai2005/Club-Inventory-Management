@@ -199,7 +199,7 @@ function LoginContent() {
                 autoComplete="username"
               />
               <label htmlFor="signin-username" className="signin-floating-label">
-                Username
+                Username or email
               </label>
             </div>
 

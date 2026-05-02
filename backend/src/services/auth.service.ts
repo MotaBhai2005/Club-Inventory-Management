@@ -31,7 +31,16 @@ export class AuthService {
   }
 
   static async login(data: any) {
-    const user = await prisma.user.findUnique({ where: { username: data.username } });
+    const identifier = String(data.username || '').trim();
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { username: { equals: identifier, mode: 'insensitive' } },
+          { email: { equals: identifier, mode: 'insensitive' } },
+          { registrationNumber: { equals: identifier, mode: 'insensitive' } }
+        ]
+      }
+    });
     
     if (!user || !(await bcrypt.compare(data.password, user.passwordHash))) {
       throw new Error('Invalid credentials');
