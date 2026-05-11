@@ -205,6 +205,7 @@ export default function InventoryTab({ items, onRefresh, isAdmin = true }: Inven
           onClose={() => setModalOpen(false)} 
           onSave={onRefresh} 
           item={editItem} 
+          existingItems={items}
         />
       )}
     </div>

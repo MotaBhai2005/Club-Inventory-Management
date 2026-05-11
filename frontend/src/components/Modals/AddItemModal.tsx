@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import * as api from "@/services/api";
@@ -8,12 +8,16 @@ interface AddItemModalProps {
   onClose: () => void;
   onSave: () => void;
   item: Item | null;
+  existingItems?: Item[];
 }
 
-export default function AddItemModal({ onClose, onSave, item }: AddItemModalProps) {
+export default function AddItemModal({ onClose, onSave, item, existingItems = [] }: AddItemModalProps) {
   const [formData, setFormData] = useState({
     name: "", cat: "", qty: 1, desc: "", cond: "Good"
   });
+  const [editingExistingItemId, setEditingExistingItemId] = useState<number | null>(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (item) setFormData({ 
@@ -24,6 +28,32 @@ export default function AddItemModal({ onClose, onSave, item }: AddItemModalProp
       cond: item.cond || "Good" 
     });
   }, [item]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const suggestions = formData.name && !editingExistingItemId && !item && existingItems.length > 0
+    ? existingItems.filter(i => i.name.toLowerCase().includes(formData.name.toLowerCase())).slice(0, 5)
+    : [];
+
+  const handleSuggestionClick = (suggestion: Item) => {
+    setFormData({
+      name: suggestion.name,
+      cat: suggestion.cat,
+      qty: suggestion.qty,
+      desc: suggestion.desc || "",
+      cond: suggestion.cond || "Good"
+    });
+    setEditingExistingItemId(suggestion.id);
+    setShowSuggestions(false);
+  };
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -41,6 +71,8 @@ export default function AddItemModal({ onClose, onSave, item }: AddItemModalProp
     try {
       if (item) {
         await api.updateItem(item.id, formData);
+      } else if (editingExistingItemId) {
+        await api.updateItem(editingExistingItemId, formData);
       } else {
         await api.addItem(formData);
       }
@@ -55,7 +87,7 @@ export default function AddItemModal({ onClose, onSave, item }: AddItemModalProp
     <div className="fixed inset-0 bg-slate-900/40 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="glass-card w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
         <div className="px-6 py-4 border-b border-white/20 dark:border-slate-700/50 flex justify-between items-center shrink-0">
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{item ? 'Edit Item' : 'Add New Item'}</h3>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{item ? 'Edit Item' : editingExistingItemId ? 'Update Existing Item' : 'Add New Item'}</h3>
           <button onClick={onClose} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-500">
             <X className="w-5 h-5" />
           </button>
@@ -63,9 +95,29 @@ export default function AddItemModal({ onClose, onSave, item }: AddItemModalProp
         
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto flex-1 min-h-0">
           <div className="space-y-4">
-            <div>
+            <div className="relative" ref={wrapperRef}>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Item Name *</label>
-              <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-3 py-2 rounded-lg glass-input bg-white/50 dark:bg-slate-800/50 text-sm focus:ring-2 focus:ring-brand-500/50 outline-none" placeholder="e.g. Arduino Uno R3" />
+              <input required type="text" value={formData.name} onChange={e => {
+                setFormData({...formData, name: e.target.value});
+                setEditingExistingItemId(null);
+                setShowSuggestions(true);
+              }} onFocus={() => setShowSuggestions(true)} className="w-full px-3 py-2 rounded-lg glass-input bg-white/50 dark:bg-slate-800/50 text-sm focus:ring-2 focus:ring-brand-500/50 outline-none" placeholder="e.g. Arduino Uno R3" />
+              
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+                  {suggestions.map(suggestion => (
+                    <button
+                      key={suggestion.id}
+                      type="button"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors flex justify-between items-center"
+                    >
+                      <span className="font-medium text-slate-800 dark:text-slate-200">{suggestion.name}</span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">{suggestion.cat}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
