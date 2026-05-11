@@ -152,4 +152,4 @@ Contributions are welcome! If you're a club member or an open-source enthusiast:
 
 ## 📄 License
 
-This project is open-source and available under the MIT License.
+This project is open-source and available under the [MIT License](LICENSE).
