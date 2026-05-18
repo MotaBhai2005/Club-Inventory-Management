@@ -7,9 +7,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 
-A comprehensive, full-stack web application designed for Robotics and Software clubs to efficiently manage their hardware components, project pipelines, inter-club lending, and member requests.
-
-Built with a modern **glassmorphic design system**, it offers a visually stunning, highly responsive user interface backed by a robust, secure backend architecture.
+A decoupled, full-stack monorepo built for university hardware labs. Features a high-fidelity glassmorphic React dashboard, a RESTful Node.js/Express API, Prisma ORM, and automated cron-based background jobs for equipment tracking.
 
 ---
 

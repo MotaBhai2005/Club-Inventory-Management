@@ -10,5 +10,21 @@ dist/
 **/.env
 **/.env.*
 **/tsconfig.tsbuildinfo
-**/AGENTS.md
-**/CLAUDE.md
+**/project_architecture_guide.md
+admin-dashboard.html
+admin.html
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE Folders
+.vscode/
+.idea/
+
+# Local Databases
+*.db
+*.db-journal
+
+# Next.js / Vercel specific
+.vercel/
