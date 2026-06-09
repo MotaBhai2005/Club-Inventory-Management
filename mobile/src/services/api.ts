@@ -6,6 +6,9 @@ import { Item, Lending, History, DashboardMetrics } from '@/types';
 
 // Robust local IP lookup helper for running Expo on emulators / physical devices
 const getBaseURL = () => {
+  if (process.env.EXPO_PUBLIC_API_URL) {
+    return process.env.EXPO_PUBLIC_API_URL;
+  }
   if (Platform.OS === 'web') {
     return 'http://localhost:5000/api';
   }

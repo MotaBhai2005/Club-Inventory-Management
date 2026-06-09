@@ -167,6 +167,9 @@ export default function ProjectsScreen() {
   const visibleProjects = projects.filter(p => p.isProject);
 
   const getBackendBase = () => {
+    if (process.env.EXPO_PUBLIC_API_URL) {
+      return process.env.EXPO_PUBLIC_API_URL.replace(/\/api\/?$/, '');
+    }
     // Standard backend host address setup
     const defaultWeb = 'http://localhost:5000';
     if (Platform.OS === 'android') {
